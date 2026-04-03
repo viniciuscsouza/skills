@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI-Driven Dashboard</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --bg-primary: #0f0f13;
+      --bg-secondary: #1a1a24;
+      --bg-card: #22222e;
+      --bg-card-hover: #2a2a38;
+      --border: #2e2e3e;
+      --text-primary: #e8e8f0;
+      --text-secondary: #9898b0;
+      --text-muted: #6868800;
+      --accent: #6c5ce7;
+      --accent-light: #a29bfe;
+      --success: #00b894;
+      --warning: #fdcb6e;
+      --danger: #ff7675;
+      --info: #74b9ff;
+      --gradient-1: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+      --gradient-2: linear-gradient(135deg, #00b894 0%, #55efc4 100%);
+      --glass: rgba(34, 34, 46, 0.7);
+      --glass-border: rgba(108, 92, 231, 0.2);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* === Header === */
+    .header {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 20px 32px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .header h1 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header-meta {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-phase {
+      background: var(--accent);
+      color: white;
+    }
+
+    .badge-status {
+      background: rgba(0, 184, 148, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(0, 184, 148, 0.3);
+    }
+
+    .last-update {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    /* === Main Layout === */
+    .main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 32px 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+    /* === Cards === */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      border-color: var(--glass-border);
+      box-shadow: var(--shadow);
+    }
+
+    .card-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-title .icon {
+      font-size: 1.1rem;
+    }
+
+    /* === Progress Bar === */
+    .progress-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .progress-bar-wrapper {
+      flex: 1;
+      height: 12px;
+      background: var(--bg-primary);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--gradient-2);
+      border-radius: 6px;
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .progress-bar-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%);
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .progress-text {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--success);
+      min-width: 60px;
+      text-align: right;
+    }
+
+    .progress-detail {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-top: 8px;
+    }
+
+    /* === Artifacts List === */
+    .artifact-tree {
+      list-style: none;
+    }
+
+    .artifact-item {
+      display: flex;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 4px;
+      transition: background 0.2s;
+      cursor: default;
+    }
+
+    .artifact-item:hover {
+      background: var(--bg-card-hover);
+    }
+
+    .artifact-icon {
+      margin-right: 10px;
+      font-size: 1rem;
+    }
+
+    .artifact-name {
+      flex: 1;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .artifact-meta {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+    }
+
+    .artifact-children {
+      padding-left: 24px;
+      list-style: none;
+    }
+
+    .dir-toggle {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .dir-toggle:hover .artifact-name {
+      color: var(--accent-light);
+    }
+
+    /* === Timeline === */
+    .timeline {
+      position: relative;
+      padding-left: 24px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding: 12px 0;
+      padding-left: 16px;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -20px;
+      top: 18px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--bg-card);
+    }
+
+    .timeline-item:first-child::before {
+      background: var(--success);
+      box-shadow: 0 0 8px rgba(0, 184, 148, 0.5);
+    }
+
+    .timeline-date {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .timeline-text {
+      font-size: 0.85rem;
+      color: var(--text-primary);
+    }
+
+    .timeline-next {
+      font-size: 0.8rem;
+      color: var(--accent-light);
+      margin-top: 4px;
+      font-style: italic;
+    }
+
+    /* === Feedback Section === */
+    .feedback-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .feedback-type-selector {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .feedback-type-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .feedback-type-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent-light);
+    }
+
+    .feedback-type-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    .feedback-textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.85rem;
+      resize: vertical;
+      transition: border-color 0.2s;
+    }
+
+    .feedback-textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .feedback-textarea::placeholder {
+      color: var(--text-muted);
+    }
+
+    .feedback-submit {
+      align-self: flex-end;
+      padding: 10px 24px;
+      border-radius: var(--radius-sm);
+      border: none;
+      background: var(--gradient-1);
+      color: white;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    .feedback-submit:hover {
+      transform: translateY(-1px);
+      opacity: 0.9;
+    }
+
+    .feedback-submit:active {
+      transform: translateY(0);
+    }
+
+    .feedback-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* === Feedback History === */
+    .feedback-history {
+      margin-top: 16px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .feedback-entry {
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+      margin-bottom: 8px;
+      border-left: 3px solid var(--accent);
+    }
+
+    .feedback-entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .feedback-entry-type {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--accent-light);
+    }
+
+    .feedback-entry-date {
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+    }
+
+    .feedback-entry-text {
+      font-size: 0.82rem;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    /* === Toast === */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 14px 24px;
+      border-radius: var(--radius-sm);
+      background: var(--success);
+      color: white;
+      font-weight: 600;
+      font-size: 0.85rem;
+      z-index: 1000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.error {
+      background: var(--danger);
+    }
+
+    /* === Loading === */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      color: var(--text-secondary);
+    }
+
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: 10px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* === Empty State === */
+    .empty-state {
+      text-align: center;
+      padding: 32px;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .empty-state .icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    /* === Responsive === */
+    @media (max-width: 768px) {
+      .main {
+        grid-template-columns: 1fr;
+        padding: 16px;
+      }
+
+      .header {
+        padding: 16px;
+      }
+
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    /* === Scrollbar === */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-primary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <h1 id="project-name">🤖 AI-Driven Dashboard</h1>
+      <div class="header-meta">
+        <span class="badge badge-phase" id="phase-badge">Carregando...</span>
+        <span class="badge badge-status" id="status-badge">—</span>
+        <span class="last-update" id="last-update"></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main">
+
+    <!-- Progress Card (full width) -->
+    <div class="card full-width">
+      <div class="card-title"><span class="icon">✈️</span> Plano de Voo</div>
+      <div class="progress-container">
+        <div class="progress-bar-wrapper">
+          <div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div>
+        </div>
+        <div class="progress-text" id="progress-text">0%</div>
+      </div>
+      <div class="progress-detail" id="progress-detail">Carregando progresso...</div>
+    </div>
+
+    <!-- Artifacts Card -->
+    <div class="card">
+      <div class="card-title"><span class="icon">📁</span> Artefatos do Projeto</div>
+      <div id="artifacts-container">
+        <div class="loading"><div class="spinner"></div> Carregando artefatos...</div>
+      </div>
+    </div>
+
+    <!-- Timeline Card -->
+    <div class="card">
+      <div class="card-title"><span class="icon">🕐</span> Timeline</div>
+      <div id="timeline-container">
+        <div class="loading"><div class="spinner"></div> Carregando timeline...</div>
+      </div>
+    </div>
+
+    <!-- Feedback Card (full width) -->
+    <div class="card full-width">
+      <div class="card-title"><span class="icon">💬</span> Feedback</div>
+      <div class="feedback-form">
+        <div class="feedback-type-selector">
+          <button class="feedback-type-btn active" data-type="geral">💭 Geral</button>
+          <button class="feedback-type-btn" data-type="bug">🐛 Bug</button>
+          <button class="feedback-type-btn" data-type="sugestao">💡 Sugestão</button>
+          <button class="feedback-type-btn" data-type="duvida">❓ Dúvida</button>
+          <button class="feedback-type-btn" data-type="aprovacao">✅ Aprovação</button>
+          <button class="feedback-type-btn" data-type="bloqueio">🚧 Bloqueio</button>
+        </div>
+        <textarea class="feedback-textarea" id="feedback-text" 
+                  placeholder="Escreva seu feedback, observação ou decisão aqui..."></textarea>
+        <button class="feedback-submit" id="feedback-submit" onclick="submitFeedback()">
+          Enviar Feedback
+        </button>
+      </div>
+      <div class="feedback-history" id="feedback-history"></div>
+    </div>
+
+  </main>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // === State ===
+    let selectedFeedbackType = 'geral';
+    let currentPhase = null;
+
+    // === API Helpers ===
+    async function fetchAPI(endpoint) {
+      try {
+        const res = await fetch(endpoint);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+      } catch (e) {
+        console.warn(`Erro ao acessar ${endpoint}:`, e.message);
+        return null;
+      }
+    }
+
+    async function postAPI(endpoint, data) {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      return await res.json();
+    }
+
+    // === Toast ===
+    function showToast(msg, isError = false) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.className = isError ? 'toast error show' : 'toast show';
+      setTimeout(() => { toast.className = 'toast'; }, 3000);
+    }
+
+    // === Render Functions ===
+
+    function renderContext(ctx) {
+      if (!ctx || ctx.error) {
+        document.getElementById('project-name').textContent = '🤖 AI-Driven Dashboard';
+        document.getElementById('phase-badge').textContent = 'Sem context.json';
+        document.getElementById('status-badge').textContent = '—';
+        return;
+      }
+
+      document.getElementById('project-name').textContent = `🤖 ${ctx.projeto || 'Projeto'}`;
+      document.title = `${ctx.projeto || 'AI-Driven'} — Dashboard`;
+
+      const faseAtual = ctx.historico_fases?.find(f => f.fase === ctx.fase_atual);
+      document.getElementById('phase-badge').textContent = 
+        `Fase ${ctx.fase_atual}${faseAtual ? ': ' + faseAtual.nome : ''}`;
+      
+      document.getElementById('status-badge').textContent = ctx.status_geral || '—';
+      currentPhase = ctx.fase_atual;
+
+      // Timeline
+      renderTimeline(ctx);
+
+      // Last update
+      if (ctx.ultimo_checkpoint?.data) {
+        document.getElementById('last-update').textContent = 
+          `Último checkpoint: ${ctx.ultimo_checkpoint.data}`;
+      }
+    }
+
+    function renderTimeline(ctx) {
+      const container = document.getElementById('timeline-container');
+      
+      if (!ctx.ultimo_checkpoint && (!ctx.historico_fases || ctx.historico_fases.length === 0)) {
+        container.innerHTML = '<div class="empty-state"><div class="icon">🕐</div>Nenhum checkpoint registrado</div>';
+        return;
+      }
+
+      let html = '<div class="timeline">';
+
+      // Checkpoint atual
+      if (ctx.ultimo_checkpoint) {
+        html += `
+          <div class="timeline-item">
+            <div class="timeline-date">${ctx.ultimo_checkpoint.data || 'Agora'}</div>
+            <div class="timeline-text">${ctx.ultimo_checkpoint.resumo || '—'}</div>
+            ${ctx.ultimo_checkpoint.proximo_passo_sugerido 
+              ? `<div class="timeline-next">→ ${ctx.ultimo_checkpoint.proximo_passo_sugerido}</div>` 
+              : ''}
+          </div>`;
+      }
+
+      // Histórico de fases
+      if (ctx.historico_fases) {
+        for (const fase of [...ctx.historico_fases].reverse()) {
+          const statusIcon = fase.status === 'concluida' ? '✅' 
+                           : fase.status === 'em_andamento' ? '🔄' 
+                           : '⏳';
+          html += `
+            <div class="timeline-item">
+              <div class="timeline-date">Fase ${fase.fase}</div>
+              <div class="timeline-text">${statusIcon} ${fase.nome} — ${fase.objetivo || ''}</div>
+            </div>`;
+        }
+      }
+
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    function renderArtifacts(data) {
+      const container = document.getElementById('artifacts-container');
+      
+      if (!data || !data.artifacts || data.artifacts.length === 0) {
+        container.innerHTML = '<div class="empty-state"><div class="icon">📁</div>Nenhum artefato encontrado</div>';
+        return;
+      }
+
+      container.innerHTML = renderArtifactList(data.artifacts, true);
+    }
+
+    function renderArtifactList(items, isRoot = false) {
+      let html = `<ul class="artifact-tree${isRoot ? '' : ' artifact-children'}">`;
+      
+      for (const item of items) {
+        if (item.type === 'directory') {
+          html += `
+            <li>
+              <div class="artifact-item dir-toggle" onclick="this.parentElement.classList.toggle('collapsed')">
+                <span class="artifact-icon">📂</span>
+                <span class="artifact-name">${item.name}/</span>
+                <span class="artifact-meta">${item.children?.length || 0} itens</span>
+              </div>
+              ${item.children ? renderArtifactList(item.children) : ''}
+            </li>`;
+        } else {
+          const icon = getFileIcon(item.name);
+          const modified = item.modified ? new Date(item.modified).toLocaleDateString('pt-BR') : '';
+          html += `
+            <li>
+              <div class="artifact-item">
+                <span class="artifact-icon">${icon}</span>
+                <span class="artifact-name">${item.name}</span>
+                <span class="artifact-meta">${modified}</span>
+              </div>
+            </li>`;
+        }
+      }
+      
+      html += '</ul>';
+      return html;
+    }
+
+    function getFileIcon(name) {
+      if (name.endsWith('.json')) return '📋';
+      if (name.endsWith('.md')) return '📝';
+      if (name.includes('visao') || name.includes('vision')) return '🎯';
+      if (name.includes('blueprint')) return '🏗️';
+      if (name.includes('decisoes') || name.includes('decision')) return '⚖️';
+      if (name.includes('plano') || name.includes('plan')) return '✈️';
+      if (name.includes('aprendizado') || name.includes('learn')) return '🧠';
+      if (name.includes('guia') || name.includes('guide')) return '🛠️';
+      return '📄';
+    }
+
+    function renderProgress(data) {
+      if (!data) return;
+
+      const fill = document.getElementById('progress-fill');
+      const text = document.getElementById('progress-text');
+      const detail = document.getElementById('progress-detail');
+
+      fill.style.width = `${data.percentage}%`;
+      text.textContent = `${data.percentage}%`;
+      detail.textContent = `${data.done} de ${data.total} tarefas concluídas`;
+
+      // Color based on progress
+      if (data.percentage === 100) {
+        text.style.color = 'var(--success)';
+      } else if (data.percentage > 50) {
+        text.style.color = 'var(--info)';
+      } else {
+        text.style.color = 'var(--accent-light)';
+      }
+    }
+
+    function renderFeedbackHistory(data) {
+      const container = document.getElementById('feedback-history');
+      
+      if (!data || !data.feedbacks || data.feedbacks.length === 0) {
+        container.innerHTML = '';
+        return;
+      }
+
+      const typeLabels = {
+        geral: '💭 Geral',
+        bug: '🐛 Bug',
+        sugestao: '💡 Sugestão',
+        duvida: '❓ Dúvida',
+        aprovacao: '✅ Aprovação',
+        bloqueio: '🚧 Bloqueio'
+      };
+
+      let html = '';
+      for (const fb of [...data.feedbacks].reverse()) {
+        const date = fb.timestamp 
+          ? new Date(fb.timestamp).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })
+          : '';
+        html += `
+          <div class="feedback-entry">
+            <div class="feedback-entry-header">
+              <span class="feedback-entry-type">${typeLabels[fb.type] || fb.type}</span>
+              <span class="feedback-entry-date">${date}</span>
+            </div>
+            <div class="feedback-entry-text">${escapeHTML(fb.text)}</div>
+          </div>`;
+      }
+      container.innerHTML = html;
+    }
+
+    function escapeHTML(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // === Feedback ===
+
+    document.querySelectorAll('.feedback-type-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelector('.feedback-type-btn.active')?.classList.remove('active');
+        btn.classList.add('active');
+        selectedFeedbackType = btn.dataset.type;
+      });
+    });
+
+    async function submitFeedback() {
+      const textEl = document.getElementById('feedback-text');
+      const text = textEl.value.trim();
+      
+      if (!text) {
+        showToast('Escreva algo antes de enviar.', true);
+        return;
+      }
+
+      const submitBtn = document.getElementById('feedback-submit');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Enviando...';
+
+      try {
+        const result = await postAPI('/api/feedback', {
+          text,
+          type: selectedFeedbackType,
+          phase: currentPhase
+        });
+
+        if (result.success) {
+          showToast('✅ Feedback registrado com sucesso!');
+          textEl.value = '';
+          // Refresh feedback list
+          const feedbackData = await fetchAPI('/api/feedback');
+          renderFeedbackHistory(feedbackData);
+        } else {
+          showToast(result.error || 'Erro ao enviar feedback', true);
+        }
+      } catch (e) {
+        showToast('Erro de conexão com o servidor', true);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Enviar Feedback';
+      }
+    }
+
+    // === Polling & Init ===
+
+    async function loadAll() {
+      const [ctx, artifacts, progress, feedback] = await Promise.all([
+        fetchAPI('/api/context'),
+        fetchAPI('/api/artifacts'),
+        fetchAPI('/api/progress'),
+        fetchAPI('/api/feedback')
+      ]);
+
+      renderContext(ctx);
+      renderArtifacts(artifacts);
+      renderProgress(progress);
+      renderFeedbackHistory(feedback);
+    }
+
+    // Initial load
+    loadAll();
+
+    // Poll every 5 seconds
+    setInterval(loadAll, 5000);
+  </script>
+</body>
+</html>

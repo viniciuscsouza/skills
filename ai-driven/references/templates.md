@@ -444,3 +444,97 @@ npm run format       # Formatar código
 - Staging:
 - Produção:
 ```
+
+---
+
+## 9. feedback.json
+
+Local: `/docs/feedback.json` — Gerenciado automaticamente pelo dashboard.
+
+```json
+{
+  "feedbacks": [
+    {
+      "id": 1712345678901,
+      "text": "O login social está demorando mais de 3 segundos para responder. Verificar se é timeout na API do Google.",
+      "type": "bug",
+      "phase": 2,
+      "timestamp": "2026-04-01T14:30:00.000Z"
+    },
+    {
+      "id": 1712345679000,
+      "text": "Gostei da estrutura de pastas. Manter esse padrão nas próximas features.",
+      "type": "aprovacao",
+      "phase": 2,
+      "timestamp": "2026-04-01T15:00:00.000Z"
+    }
+  ]
+}
+```
+
+**Tipos de feedback disponíveis:**
+
+| Tipo | Emoji | Quando usar |
+|------|-------|-------------|
+| `geral` | 💭 | Observações genéricas |
+| `bug` | 🐛 | Problemas encontrados |
+| `sugestao` | 💡 | Ideias e melhorias |
+| `duvida` | ❓ | Perguntas ao copiloto |
+| `aprovacao` | ✅ | Confirmação de que algo está bom |
+| `bloqueio` | 🚧 | Algo que impede progresso |
+
+---
+
+## 10. Relatório de Subagente (referência)
+
+Formato padrão de relatório retornado por subagentes. Não é um arquivo salvo — é o formato que o orquestrador espera receber.
+
+### Implementador
+
+```markdown
+- **Status:** FEITO | FEITO_COM_RESSALVAS | BLOQUEADO | PRECISA_CONTEXTO
+- **O que foi implementado:** [descrição]
+- **Testes executados:** [lista com resultados]
+- **Arquivos alterados:** [lista de caminhos]
+- **Achados da auto-revisão:** [itens encontrados e corrigidos]
+- **Preocupações:** [se houver]
+```
+
+### Explorador
+
+```markdown
+### 📁 Estrutura do Projeto
+[árvore + descrição]
+
+### 🛠️ Stack Tecnológica
+| Camada | Tecnologia | Versão |
+|--------|-----------|--------|
+
+### 📐 Padrões Observados
+[convenções, arquitetura]
+
+### 📊 Estado Atual
+- Documentação: [existe/não/parcial]
+- Testes: [existem/não/parcial]
+- CI/CD: [configurado/não]
+
+### ⚠️ Pontos de Atenção
+[lista priorizada]
+```
+
+### Validador
+
+```markdown
+### Resultado Geral: ✅ APROVADO | ❌ REPROVADO | ⚠️ APROVADO COM RESSALVAS
+
+### Critérios de Aceitação
+| # | Critério | Status | Evidência |
+|---|----------|--------|-----------|
+
+### Edge Cases
+| Caso | Tratado? | Comportamento |
+|------|----------|---------------|
+
+### Issues para Correção
+[lista priorizada, se reprovado]
+```
