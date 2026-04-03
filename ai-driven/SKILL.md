@@ -1,6 +1,6 @@
 ---
 name: ai-driven
-description: "Workflow de copiloto ativo para desenvolvimento de software com IA. Use essa skill SEMPRE que o usuário pedir para iniciar um projeto novo, retomar um projeto existente, planejar uma feature, organizar documentação de desenvolvimento, ou quando mencionar 'ai-driven', 'copiloto', 'documentação viva', 'plano de voo', 'fase do projeto', 'context.json' ou quiser que a IA assuma uma postura proativa na gestão do desenvolvimento. Também use quando o usuário parecer perdido sobre próximos passos, quando iniciar uma sessão de trabalho sem contexto claro, ou quando quiser estrutura de projeto profissional mesmo sendo iniciante."
+description: "Workflow de copiloto ativo para desenvolvimento de software com IA. Use essa skill para gerenciar projetos, planos de voo e documentação viva. Fornece ferramentas para inicializar estruturas de projetos ('init_ai_driven')."
 ---
 
 # AI-Driven: Copiloto de Desenvolvimento
@@ -102,6 +102,14 @@ Este é o arquivo mais importante. Ele é o ponto de partida de toda sessão. Qu
 ```
 
 Para ver os templates completos de cada documento, consulte: `references/templates.md`
+
+## Ferramentas
+
+A skill `ai-driven` fornece as seguintes ferramentas para automatizar o workflow:
+
+### **init_ai_driven**
+Inicializa a estrutura de documentação do projeto (pasta `docs/`, `context.json` e `00-visao.md`).
+- **Execução:** `bash scripts/init.sh "<nome_do_projeto>"`
 
 ---
 
