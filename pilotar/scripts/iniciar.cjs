@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Inicializa a estrutura de documentação para um projeto pilotar.
- * Cria o diretório docs/ com subpastas e o context.json inicial.
+ * Cria o diretório docs/ com subpastas numeradas e o context.json inicial.
  *
  * Uso: node pilotar/scripts/iniciar.cjs [nome-do-projeto]
  */
@@ -14,10 +14,12 @@ const docsDir = path.join(process.cwd(), 'docs');
 
 const dirs = [
   'docs',
-  'docs/ideas',
-  'docs/specs',
-  'docs/plans',
-  'docs/tasks',
+  'docs/01-ideias',
+  'docs/02-especificacoes',
+  'docs/03-planos',
+  'docs/04-tarefas',
+  'docs/05-decisoes',
+  'docs/07-debug',
   'docs/feedback',
 ];
 
@@ -32,8 +34,9 @@ const contextJson = {
     especificacao: null,
     plano_tecnico: null,
     tarefas: null,
-    decisoes: 'docs/05-decisoes.md',
+    decisoes_dir: 'docs/05-decisoes/',
     aprendizados: 'docs/06-aprendizados.md',
+    debug_dir: 'docs/07-debug/',
   },
   progresso: {
     tarefas_concluidas: 0,
@@ -65,17 +68,6 @@ const visaoMd = `# Visão Geral: ${projectName}
 [Limitações de tempo, tecnologia, recursos?]
 `;
 
-const decisoesMd = `# Decisões Arquiteturais
-
-## Formato de ADR
-
-### [Número]: [Título da Decisão]
-- **Data:** YYYY-MM-DD
-- **Contexto:** [Qual é a situação?]
-- **Decisão:** [O que decidimos?]
-- **Consequências:** [O que isso implica?]
-`;
-
 const aprendizadosMd = `# Aprendizados
 
 ## [Data] - [Tema]
@@ -105,7 +97,6 @@ if (!fs.existsSync(contextPath)) {
 // Create markdown files
 const files = {
   'docs/00-visao.md': visaoMd,
-  'docs/05-decisoes.md': decisoesMd,
   'docs/06-aprendizados.md': aprendizadosMd,
 };
 

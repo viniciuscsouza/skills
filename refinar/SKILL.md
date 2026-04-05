@@ -30,7 +30,7 @@ node /mnt/skills/user/refinar/scripts/refinar.cjs
 
 ## Saída
 
-A saída final é um one-pager em markdown salvo em `docs/ideas/[nome-da-ideia].md` (após confirmação do usuário), contendo:
+A saída final é um one-pager em markdown salvo em `docs/01-ideias/[nome-da-ideia].md` (após confirmação do usuário), contendo:
 - Declaração do Problema
 - Direção Recomendada
 - Suposições-Chave
@@ -138,7 +138,7 @@ Produza um artefato concreto — um one-pager em markdown que faz o trabalho ava
 
 **A lista de "Não Vamos Fazer" é provavelmente a parte mais valiosa.** Foco é dizer não para boas ideias. Torne os trade-offs explícitos.
 
-Pergunte ao usuário se ele gostaria de salvar em `docs/ideas/[nome-da-ideia].md` (ou um local de sua escolha). Só salve se ele confirmar.
+Pergunte ao usuário se ele gostaria de salvar em `docs/01-ideias/[nome-da-ideia].md` (ou um local de sua escolha). Só salve se ele confirmar.
 
 ### Anti-padrões a Evitar
 

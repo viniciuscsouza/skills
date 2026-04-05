@@ -5,7 +5,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const IDEAS_DIR = path.join('docs', 'ideas');
+const IDEAS_DIR = path.join('docs', '01-ideias');
 
 if (!fs.existsSync(IDEAS_DIR)) {
   fs.mkdirSync(IDEAS_DIR, { recursive: true });

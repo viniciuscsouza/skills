@@ -112,6 +112,10 @@ Eles são lidos como contexto puramente textual investigativo. Você (O assisten
 
 ## Assinatura de Checklist do "Debugador"
 
+## Assinatura de Checklist do "Debugador"
+
+**Artefato:** Salve o relatório de debug em `docs/07-debug/[YYYY-MM-DD]-[tema].md` para rastreabilidade.
+
 - [ ] A reprodução foi confirmada localmente no escopo limpo provado sem suposições falsas.
 - [ ] A raiz foi consertada, ao lado inverso ao simples silenciamento de logs ou sintoma em frontend.
 - [ ] O teste unitário blindador foi aprovado de primeira (Fez sentido sua escrita preventiva).

@@ -28,7 +28,7 @@ Documentos rápidos e estritos que gravam em pedra o raciocínio vigente pelo qu
 Sempre que o retorno sobre a mudança for caro ou irreversível.
 Exemplos: Escolher usar Sistema Relacional ao invés de NoSQL, adotar REST em vez de GraphQL, decidir estruturar tudo numa nuvem proprietária ao invés de servidore abertos.
 
-### O Template Universal (Salve em `/docs/decisions/`)
+### O Template Universal (Salve em `docs/05-decisoes/`)
 
 Todos os ADRs devem seguir esta sequência inquebrável:
 

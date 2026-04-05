@@ -20,14 +20,14 @@ Escreva um documento estruturado antes de escrever o código. A especificação 
 
 ## O Fluxo com Checagens (Gated Workflow)
 
-Siga estas 4 etapas. **Nunca** siga livremente para a próxima frente de atuação sem que a etapa atual não sofra revisão.
+Siga estas 3 etapas. **Nunca** siga livremente para a próxima frente de atuação sem que a etapa atual não sofra revisão. A etapa de implementação é delegada à skill `implementar`.
 
 ```text
-ESPECIFICAR ──→ PLANEJAR ──→ TAREFAS ──→ IMPLEMENTAR
-     │             │            │             │
-     ▼             ▼            ▼             ▼
-   Revisão      Revisão      Revisão       Revisão
-   Humana       Humana       Humana        Humana
+ESPECIFICAR ──→ PLANEJAR ──→ TAREFAS
+     │             │            │
+     ▼             ▼            ▼
+   Revisão      Revisão      Revisão
+   Humana       Humana       Humana
 ```
 
 ### Fase 1: Especificar
@@ -50,7 +50,9 @@ Escreva uma especificação (Template) com as seguintes camadas:
 2. **Ambiente/Comandos:** Quais rodadas compilarão e testarão a aplicação com sucesso absoluto?
 3. **Estrutura de Arquivos:** Onde isso vai parar e que dependências cria?
 4. **Acordos Práticos:** Regras "Sempre", "Pergunte", "Nunca".
-5. **Critérios de Sucesso:** Metas inquestionáveis. Transforme desejos de *"Faça mais rápido"* em métricas explícitas *"A lista de resultados surge em 2 segundos"*. 
+5. **Critérios de Sucesso:** Metas inquestionáveis. Transforme desejos de *"Faça mais rápido"* em métricas explícitas *"A lista de resultados surge em 2 segundos"*.
+
+**Artefato:** Salve em `docs/02-especificacoes/[nome-da-spec].md`.
 
 ### Fase 2: Planejar
 
@@ -60,6 +62,8 @@ Com o problema compreendido e especificado, gere o plano técnico de execução:
 3. Riscos claros percebidos.
 
 Se o humano interrogar o plano, adapte.
+
+**Artefato:** Salve em `docs/03-planos/[nome-do-plano].md`.
 
 ### Fase 3: Tarefas (Checklist Executável)
 
@@ -73,19 +77,14 @@ Quebre a Fase 2 em ações preenchendo as diretrizes formalizadas no roteiro de 
 ```
 Nenhuma tarefa deve envolver a reconstrução mágica da base por si mesma.
 
-### Fase 4: Implementar
-
-Na etapa focada em agir e programar:
-
-- Realize o trabalho guiando suas ações baseadas no fluxo das suas outras diretivas:
-  - Adote o ciclo metódico da regra **implementar** para nunca cometer commits gigantes ou código morto.
-  - Para as provas dos códigos durante o caminho, siga os preceitos descritos no manual **testar** da sua biblioteca interna.
-  - Se a conversa encher de detritos antigos de erros na tentativa erro/acerto, administre o LLM com as melhores práticas da sua matriz de **contextualizar** para evitar a falência do foco.
+**Artefato:** Salve em `docs/04-tarefas/[nome-do-checklist].md`.
 
 ## Mantendo a Especificação Viva
 
-Mudar os planos faz parte da dinâmica. 
-No entanto, caso uma rota técnica fuja do escopo documentado original em `Spec`, ou falhas inesperadas de banco forçarem nova lógica - o documento principal é atualizado (commits controlados), para somente depois a equipe atuar no código seguindo a nova fonte da verdade. Essa especificação deve ser sempre persistida num diretório `.docs` ou `/arquitetura` global atrelada à submissão das requisições.
+Mudar os planos faz parte da dinâmica.
+No entanto, caso uma rota técnica fuja do escopo documentado original em `Spec`, ou falhas inesperadas de banco forçarem nova lógica - o documento principal é atualizado (commits controlados), para somente depois a equipe atuar no código seguindo a nova fonte da verdade.
+
+Se decisões arquiteturais forem tomadas durante a especificação, registre como ADR usando a skill `documentar` em `docs/05-decisoes/ADR-NNN-[tema].md`.
 
 ## Sinais de Alerta (Red Flags)
 

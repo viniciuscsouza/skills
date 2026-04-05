@@ -2,6 +2,16 @@
 
 Estes templates devem ser utilizados como ponto de partida (boilerplate) nas fases relativas ao Desenvolvimento Orientado a Especificações (Spec-Driven Development).
 
+**Caminhos de saída:**
+- Especificação → `docs/02-especificacoes/[nome].md`
+- Plano Técnico → `docs/03-planos/[nome].md`
+- Tarefas → `docs/04-tarefas/[nome].md`
+
+**Caminhos de saída:**
+- Especificação → `docs/02-especificacoes/[nome].md`
+- Plano Técnico → `docs/03-planos/[nome].md`
+- Tarefas → `docs/04-tarefas/[nome].md`
+
 ## 1. Template de Especificação (Spec)
 Este documento estabelece o contrato do que será construído.
 

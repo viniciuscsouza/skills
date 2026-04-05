@@ -16,7 +16,7 @@ Use subagentes quando a tarefa é pesada, independente e produz um artefato comp
 - A ideia já foi refinada e só precisa de validação rápida
 - É um bug fix óbvio que não precisa de brainstorming
 
-**Artefato de saída:** `docs/ideas/[nome].md`
+**Artefato de saída:** `docs/01-ideias/[nome].md`
 
 ### especificar → Subagente
 **Chame quando:**
@@ -29,9 +29,9 @@ Use subagentes quando a tarefa é pesada, independente e produz um artefato comp
 - Ajuste cosmético que não precisa de spec formal
 
 **Artefatos de saída:**
-- `docs/specs/[nome].md`
-- `docs/plans/[nome].md`
-- `docs/tasks/[nome].md`
+- `docs/02-especificacoes/[nome].md`
+- `docs/03-planos/[nome].md`
+- `docs/04-tarefas/[nome].md`
 
 ### implementar → Subagente
 **Chame quando:**
@@ -52,6 +52,25 @@ Use subagentes quando a tarefa é pesada, independente e produz um artefato comp
 **Não chame quando:**
 - Checklist rápido durante desenvolvimento
 - Revisão de mudança pequena (< 50 linhas)
+
+### debugar → Subagente
+**Chame quando:**
+- Bug complexo com causa-raiz desconhecida
+- Incidente em produção
+- Erro intermitente que precisa de investigação profunda
+
+**Não chame quando:**
+- Bug óbvio com causa clara (vá direto para testar → implementar)
+
+### documentar → Subagente
+**Chame quando:**
+- Criar conjunto de ADRs para decisão arquitetural grande
+- Escrever README completo de projeto novo
+- Documentar contratos de API
+
+**Não chame quando:**
+- Registrar uma única decisão rápida (faça inline)
+- Comentário de código pontual
 
 ## Quando Referenciar Diretamente
 
@@ -78,6 +97,12 @@ Use as regras durante o trabalho:
 - Simplicidade antes de abstração
 - Disciplina de escopo
 
+### simplificar → Referência Durante Refatoração
+Use após implementar, antes de revisar:
+- 5 princípios de simplificação
+- Processo de 4 passos
+- Regra das 500 linhas
+
 ### revisar → Referência Rápida
 Use os 5 eixos para checklists rápidos:
 - Correção, Legibilidade, Arquitetura, Segurança, Desempenho
@@ -85,27 +110,43 @@ Use os 5 eixos para checklists rápidos:
 ## Mapa de Decisão
 
 ```
-Tarefa nova → É pesada e independente?
-  ├── Sim → Chamar como subagente
-  └── Não → Referenciar e executar inline
+Solicitação do usuário → Qual tipo?
+├── Projeto novo → pilotar → fluxo completo (5 fases + documentar)
+├── Feature nova → pilotar → contextualizar → [refinar] → especificar → implementar → revisar
+├── Bug → pilotar → debugar → testar → implementar → revisar
+├── Refatoração → pilotar → contextualizar → especificar → implementar → simplificar → revisar
+├── Debug urgente → debugar → testar → implementar (atalho, sem pilotar)
+├── Documentar → pilotar → contextualizar → documentar (atalho)
+└── Simplificar → simplificar → testar (atalho, sem pilotar)
 
-Durante implementação → Precisa de teste?
-  ├── Sim → Referenciar testar (inline)
-  └── Não → Seguir implementar
-
-Após feature completa → Precisa de revisão formal?
-  ├── Sim → Chamar revisar como subagente
-  └── Não → Checklist rápido inline
+Dentro de qualquer fluxo → É pesado e independente?
+├── Sim → Chamar como subagente
+└── Não → Referenciar e executar inline
 ```
 
 ## Integração de Artefatos
 
-**Regra fundamental:** A skill `pilotar` NUNCA copia ou sobrescreve artefatos gerados por outras skills. Ela apenas referencia seus caminhos no `context.json`.
+**Regra fundamental:** Cada skill é dona do seu diretório de saída. A `pilotar` NUNCA copia ou sobrescreve artefatos gerados por outras skills. Ela apenas referencia seus caminhos no `context.json`.
 
 | Skill | Diretório de Saída | Como pilotar usa |
 |-------|-------------------|-----------------|
-| refinar | `docs/ideas/[nome].md` | Lê e referencia no context.json |
-| especificar | `docs/specs/`, `docs/plans/`, `docs/tasks/` | Lê e referencia no context.json |
-| pilotar | `docs/00-visao.md`, `docs/05-decisoes.md`, `docs/06-aprendizados.md`, `docs/context.json` | Cria e mantém diretamente |
+| pilotar | `docs/context.json`, `docs/00-visao.md`, `docs/06-aprendizados.md` | Cria e mantém diretamente |
+| refinar | `docs/01-ideias/[nome].md` | Lê e referencia no context.json |
+| especificar | `docs/02-especificacoes/`, `docs/03-planos/`, `docs/04-tarefas/` | Lê e referencia no context.json |
+| documentar | `docs/05-decisoes/ADR-NNN-[tema].md` | Lê e referencia no context.json |
+| debugar | `docs/07-debug/[data]-[tema].md` | Lê e referencia no context.json |
+| implementar, testar, revisar, simplificar | Código + testes (sem docs obrigatórios) | Não geram artefatos de docs |
 
 Se um artefato já existe, leia-o do caminho original. Nunca crie uma cópia em outro lugar.
+
+## Tabela de Roteamento Rápido
+
+| O usuário diz... | Tipo | Fluxo |
+|------------------|------|-------|
+| "Quero criar um app/site/sistema" | Projeto novo | Full: contextualizar → refinar → especificar → implementar → revisar → documentar |
+| "Quero adicionar X ao meu projeto" | Feature | contextualizar → [refinar] → especificar → implementar → revisar |
+| "Tem um bug em X" | Bug | debugar → testar → implementar → revisar |
+| "Quero melhorar/limpar o código de X" | Refatoração | contextualizar → especificar → implementar → simplificar → revisar |
+| "Tá tudo quebrado!" | Debug urgente | debugar → testar → implementar |
+| "Preciso documentar X" | Documentar | contextualizar → documentar |
+| "Esse código tá confuso" | Simplificar | simplificar → testar |
